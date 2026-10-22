@@ -171,9 +171,6 @@ function startMode(m) {
   show('gameScreen');
   $('cameraPanel').classList.remove('show');
   renderQuestion();
-}
-
-}
 function renderQuestion(){locked=false;selected=Number($('aimRange').value);const item=Q[mode][index];$('modeLabel').textContent=modeNames[mode];$('questionCounter').textContent=`SOALAN ${index+1} / 5`; $('questionText').textContent=item.q;$('storyText').textContent=item.story;$('score').textContent=score;$('stars').textContent=stars+' ⭐';$('progressFill').style.width=(index/5*100)+'%';$('aimRange').value=selected;$('aimLabel').textContent='Lorong '+(selected+1);$('ball').classList.remove('rolling');$('ball').style.left=((selected+0.5)*25)+'%';$('ball').style.setProperty('--aim',((selected+0.5)*25)+'%');$('laneHint').textContent='Pilih pin jawapan, kemudian tekan BALING!';$('throwBtn').disabled=false;$('throwBtn').style.opacity='1';const pins=$('pins');pins.innerHTML='';const order=[0,1,2,3];for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}item.a.forEach((answer,slot)=>{const b=document.createElement('button');b.className='pin-choice';b.dataset.slot=slot;b.dataset.answer=order[slot];b.innerHTML=`<img class="pinimg" src="bowling_pin.svg" alt="Pin boling"><span class="answer">${answer}</span>`;b.addEventListener('click',()=>selectPin(slot));pins.appendChild(b)});setFeedback('Pilih pin jawapan atau laraskan arah. Kemudian tekan BALING.');}
 function selectPin(slot){if(locked)return;selected=slot;$('aimRange').value=slot;$('aimLabel').textContent='Lorong '+(slot+1);document.querySelectorAll('.pin-choice').forEach((p,i)=>p.classList.toggle('selected',i===slot));$('ball').style.left=((slot+.5)*25)+'%';$('ball').style.setProperty('--aim',((slot+.5)*25)+'%');}
 $('aimRange').addEventListener('input',e=>selectPin(+e.target.value));
