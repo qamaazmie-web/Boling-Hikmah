@@ -101,8 +101,6 @@ function syncBackgroundMusic() {
 }
 
 let screenNow='homeScreen',mode='lesson',index=0,score=0,correctCount=0,stars=0,selected=0,locked=false,soundOn=true,sessionScores={lesson:null,values:null,proverbs:null},sessionCorrect={lesson:0,values:0,proverbs:0},camStream=null,handLandmarker=null,videoLoop=null,lastPalmX=null,lastPalmY=null,lastThrowAt=0,prevWristY=null;
-backgroundMusic.loop = true;
-backgroundMusic.volume = 0.25;
 let musicStarted = false;
 
 function startBackgroundMusic() {
