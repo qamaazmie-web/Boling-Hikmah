@@ -77,7 +77,28 @@ let screenNow='homeScreen',mode='lesson',index=0,score=0,correctCount=0,stars=0,
 const $=id=>document.getElementById(id);const show=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');screenNow=id;window.scrollTo({top:0,behavior:'smooth'})};
 function audio(name){if(!soundOn)return;const src=name==='hit'?'audio/pins_fall.mp3':'audio/'+name+'.wav';const a=new Audio(src);a.volume=name==='hit'?.78:.5;a.play().catch(()=>{if(name!=='hit')beep(name);});}
 let backgroundMusic=null,musicStarted=false;
-function startBackgroundMusic(){if(!soundOn)return;if(!backgroundMusic){backgroundMusic=new Audio('audio/background_music.mp3');backgroundMusic.loop=true;backgroundMusic.volume=.28;}musicStarted=true;backgroundMusic.play().catch(()=>{const unlock=()=>{if(soundOn&&musicStarted)backgroundMusic.play().catch(()=>{});document.removeEventListener('pointerdown',unlock,true);document.removeEventListener('keydown',unlock,true)};document.addEventListener('pointerdown',unlock,true);document.addEventListener('keydown',unlock,true);});}
+
+function startBackgroundMusic(){
+  if(!soundOn)return;
+  if(!backgroundMusic){
+    backgroundMusic=new Audio('./background_music.mp3');
+    backgroundMusic.loop=true;
+    backgroundMusic.volume=0.28;
+  }
+  musicStarted=true;
+  backgroundMusic.play().catch(()=>{
+    const unlock=()=>{
+      if(soundOn&&musicStarted){
+        backgroundMusic.play().catch(()=>{});
+      }
+      document.removeEventListener('pointerdown',unlock,true);
+      document.removeEventListener('keydown',unlock,true);
+    };
+    document.addEventListener('pointerdown',unlock,true);
+    document.addEventListener('keydown',unlock,true);
+  });
+}
+
 function syncBackgroundMusic(){if(!backgroundMusic)return;if(soundOn&&musicStarted)backgroundMusic.play().catch(()=>{});else backgroundMusic.pause();}
 
 function beep(name){if(!soundOn)return;try{const ctx=new(window.AudioContext||window.webkitAudioContext)(),o=ctx.createOscillator(),g=ctx.createGain();let f=440,d=.12;if(name==='correct'){f=740;d=.22}else if(name==='wrong'){f=180;d=.22}else if(name==='throw'||name==='roll'){f=240;d=.25}else if(name==='hit'){f=110;d=.18}else if(name==='win'){f=880;d=.5}else if(name==='click'){f=520;d=.07}o.type=name==='hit'?'triangle':'sine';o.frequency.setValueAtTime(f,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(Math.max(70,f*.55),ctx.currentTime+d);g.gain.setValueAtTime(.0001,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.13,ctx.currentTime+.015);g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+d);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+d+.02);setTimeout(()=>ctx.close(),800)}catch(e){}}
