@@ -75,7 +75,22 @@ proverbs:[
 const modeNames={lesson:'BOLING PENGAJARAN',values:'BOLING NILAI MURNI',proverbs:'BOLING PERIBAHASA'};
 let screenNow='homeScreen',mode='lesson',index=0,score=0,correctCount=0,stars=0,selected=0,locked=false,soundOn=true,sessionScores={lesson:null,values:null,proverbs:null},sessionCorrect={lesson:0,values:0,proverbs:0},camStream=null,handLandmarker=null,videoLoop=null,lastPalmX=null,lastPalmY=null,lastThrowAt=0,prevWristY=null;
 const $=id=>document.getElementById(id);const show=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');screenNow=id;window.scrollTo({top:0,behavior:'smooth'})};
-function audio(name){if(!soundOn)return;const src=name==='hit'?'audio/pins_fall.mp3':'audio/'+name+'.wav';const a=new Audio(src);a.volume=name==='hit'?.78:.5;a.play().catch(()=>{if(name!=='hit')beep(name);});}
+
+function audio(name){
+  if(!soundOn)return;
+
+  const src = name === 'hit'
+    ? './pins_fall.mp3'
+    : './' + name + '.wav';
+
+  const a = new Audio(src);
+  a.volume = name === 'hit' ? 0.78 : 0.5;
+
+  a.play().catch(()=>{
+    if(name !== 'hit') beep(name);
+  });
+}
+
 let backgroundMusic=null,musicStarted=false;
 
 function startBackgroundMusic(){
